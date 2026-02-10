@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery Internship - MARINI Edition</title>
+    <title>Mastery Internship - MARINI Final</title>
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --iphone-green: #34C759;
-            --iphone-blue: #007AFF;
             --glass: rgba(255, 255, 255, 0.9);
             --text-main: #2d3436;
         }
@@ -21,10 +20,8 @@
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; margin: 0; padding: 20px;
             color: var(--text-main);
-            transition: all 0.5s ease;
         }
 
-        /* --- HEADER & SWITCH --- */
         .top-header {
             width: 100%; max-width: 900px;
             display: flex; justify-content: space-between; align-items: center;
@@ -47,16 +44,14 @@
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #dfe6e9; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background: var(--iphone-green); }
         input:checked + .slider:before { transform: translateX(22px); }
 
-        /* --- CONTENEUR --- */
         .card-container { 
             width: 95%; max-width: 850px; background: white; border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.1); padding: 40px;
             position: relative; overflow: hidden; box-sizing: border-box;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .card-container::before {
@@ -64,11 +59,10 @@
             background: var(--primary-gradient);
         }
 
-        /* --- BANQUE DE MOTS --- */
         .word-bank {
             background: #f8faff; padding: 25px; border-radius: 20px;
             margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 12px;
-            justify-content: center; border: 2px dashed #e0e6ed; min-height: 50px;
+            justify-content: center; border: 2px dashed #e0e6ed; min-height: 60px;
         }
 
         .word-item {
@@ -77,31 +71,27 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 1px solid #e0e6ed; transition: all 0.2s;
         }
-        .word-item:hover { transform: translateY(-3px); border-color: #6c5ce7; }
         .word-item.selected { background: #4834d4; color: white; }
         .word-item.used { opacity: 0.2; pointer-events: none; }
 
-        /* --- TEXTE --- */
-        .quiz-content { font-size: 1.4rem; line-height: 2.6; color: #2d3436; margin: 20px 0; }
+        .quiz-content { font-size: 1.3rem; line-height: 2.4; color: #2d3436; margin: 20px 0; }
+        
         .drop-zone {
             display: inline-flex; align-items: center; justify-content: center;
-            min-width: 130px; min-height: 42px; border-radius: 10px;
+            min-width: 120px; min-height: 38px; border-radius: 8px;
             background: #f1f2f6; border: 2px solid #dfe4ea;
-            margin: 0 6px; vertical-align: middle; transition: all 0.3s;
+            margin: 0 5px; vertical-align: middle; transition: 0.3s;
+            cursor: pointer; padding: 0 10px;
         }
         .drop-zone.filled { background: white; border-color: #6c5ce7; color: #6c5ce7; font-weight: 800; }
         .is-correct { background: #ebfaef !important; border-color: #2ecc71 !important; color: #27ae60 !important; }
-        .is-incorrect { background: #fff5f5 !important; border-color: #ff7675 !important; color: #d63031 !important; animation: shake 0.4s; }
+        .is-incorrect { background: #fff5f5 !important; border-color: #ff7675 !important; color: #d63031 !important; }
 
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-
-        /* --- CONTROLES --- */
         .controls { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
         .main-btn { 
             background: var(--primary-gradient); color: white; 
             padding: 18px; border: none; border-radius: 18px; font-weight: 800;
-            font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
-            transition: all 0.3s;
+            font-size: 1.1rem; cursor: pointer; transition: 0.3s;
         }
 
         .bottom-actions { display: flex; gap: 10px; align-items: center; }
@@ -109,7 +99,6 @@
             background: white; color: #636e72; border: 2px solid #dfe6e9;
             width: 55px; height: 55px; border-radius: 18px; cursor: pointer;
             display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-            transition: all 0.2s; flex-shrink: 0;
         }
 
         .speed-control {
@@ -119,18 +108,16 @@
         .speed-opt {
             flex: 1; text-align: center; padding: 8px 0; font-size: 0.85rem;
             font-weight: 800; color: #636e72; cursor: pointer; border-radius: 11px;
-            transition: 0.2s;
         }
-        .speed-opt.active { background: white; color: #764ba2; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .speed-opt.active { background: white; color: #764ba2; }
 
-        body.mobile-mode { background: #f2f2f7; }
         body.mobile-mode .card-container { max-width: 420px; padding: 25px; border-radius: 40px; }
     </style>
 </head>
 <body>
 
     <div class="top-header">
-        <div class="logo">🏭 MARINI Pro-App</div>
+        <div class="logo">🏭 MARINI Training</div>
         <div class="switch-container">
             <span style="font-size: 0.75rem; font-weight: 700; color: #636e72;">MODE IPHONE</span>
             <label class="switch">
@@ -141,8 +128,8 @@
     </div>
 
     <div class="card-container">
-        <div id="part-label" style="color: #a29bfe; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; font-size: 0.8rem;">CHAPTER 01</div>
-        <h3 id="part-title" style="margin-top:0; font-size: 1.6rem; color: #2d3436;">Loading...</h3>
+        <div id="part-label" style="color: #a29bfe; font-weight: 800; font-size: 0.8rem;">PARTIE 01</div>
+        <h3 id="part-title" style="margin-top:5px; font-size: 1.6rem;">Introduction</h3>
         
         <div class="word-bank" id="word-bank" ondrop="dropToBank(event)" ondragover="allowDrop(event)"></div>
         <div id="quiz-text" class="quiz-content"></div>
@@ -164,15 +151,13 @@
 
     <script>
         const data = [
-            { t: "Introduction", content: "Today, I am going to present my internship and three documents related to manufacturing and industrial innovation. This presentation explains my professional experience and what I learned about manufacturing processes and industrial organisation." },
-            { t: "The company", content: "I did a six-week internship at MARINI, a small-to-medium-sized company located in Livry-Gargan. The company was founded in 1975 and specialises in the manufacture of custom metal parts for elevator cabins." },
-            { t: "Internship activities", content: "During my internship, I observed and assisted my colleagues in their daily tasks. I took part in several manufacturing processes such as laser cutting, bending, tapping, and assembly. I also worked independently or with technicians, for example assembling safety system kits and using bending machines." },
-            { t: "Skills and difficulties", content: "This internship helped me understand how a manufacturing company works. I learned the importance of organisation, precision, and teamwork. I also faced difficulties such as lack of time and multiple tasks. To avoid mistakes, I had to be organised, make decisions, and find solutions efficiently." },
-            { t: "Technical report", content: "The first document is a technical report produced by Marini. It describes a centering kit used in elevator cabins. The document explains the components, technical characteristics, assembly steps, and safety features. Its goal is to ensure correct and safe use of the equipment." },
-            { t: "Industrial innovation", content: "The second document is a press article published in 2013 by David Szondy. It presents industrial innovation at Ford in the United States. The article explains Ford’s Freeform manufacturing technology, which allows prototypes to be made directly from CAD files. This process reduces development time and costs." },
-            { t: "Sheet metal fabrication", content: "The last document is a specialised press article published in 2019. It presents sheet metal fabrication as a manufacturing process. This process uses cutting and bending to produce thin metal parts. It is cost-effective and suitable for prototypes and finished products." },
-            { t: "Link with my internship", content: "These documents helped me better understand what I observed during my internship. They are directly related to manufacturing processes such as metal forming, assembly, and innovation. They show how modern industry combines technical knowledge, efficiency, and safety." },
-            { t: "Conclusion", content: "To conclude, my internship at MARINI allowed me to discover the reality of manufacturing work. The documents show the importance of technical documentation, innovation, and efficient production methods. This experience helped me understand the role of mechanical design and manufacturing in industry." },
+            { t: "Introduction", content: "I did a six-week internship at MARINI, a small-to-medium-sized company located in Livry-Gargan. The company was founded in 1975 and specializes in the manufacture of custom metal parts for elevator cabins." },
+            { t: "Internship activities", content: "During my internship, I observed and assisted my colleagues in their daily tasks. I participated in several stages of manufacturing, such as laser cutting, bending, tapping, and assembly. I carried out different tasks independently or in collaboration with technicians, for example assembling safety system kits and using bending machines." },
+            { t: "What I learned", content: "This internship helped me understand how a manufacturing company works. However, I also faced some difficulties, such as lack of time and too many assignments. I had to be organized, make decisions, and find solutions to avoid mistakes." },
+            { t: "First document: Technical report", content: "The first document is a technical report by Marini, a French company based in Livry-Gargan. It describes a centering kit used in elevator cabins. The document explains its components, technical characteristics, assembly, and safety features. Its purpose is to ensure the correct and safe use of the equipment." },
+            { t: "Second document: Industrial innovation", content: "The second document is a press article published in 2013 by David Szondy. It explains industrial innovation at Ford in the United States and presents Ford's Freeform manufacturing technology. This technology allows prototypes to be created directly from CAD files instead of using traditional methods, resulting in time and cost savings." },
+            { t: "Third document: Sheet metal fabrication", content: "The last document is a specialized press article published in 2019 by Guest Post. It presents sheet metal fabrication as a manufacturing process. This process is used to manufacture thin metal parts by cutting and bending sheet metal. It is cost-effective and suitable for prototypes and finished products." },
+            { t: "Conclusion", content: "These documents are linked to my internship because they relate to manufacturing, innovation, and safety. They helped me better understand industrial processes and the importance of technical documentation." },
             { t: "Ending", content: "Thank you for your attention." }
         ];
 
@@ -201,19 +186,18 @@
             selectedWordElement = null;
             const part = data[currentIdx];
             document.getElementById('part-title').innerText = part.t;
-            document.getElementById('part-label').innerText = `CHAPTER ${String(currentIdx + 1).padStart(2, '0')}`;
+            document.getElementById('part-label').innerText = `PARTIE ${String(currentIdx + 1).padStart(2, '0')}`;
             
             const words = part.content.split(' ');
             let selectedIndices = [];
             for (let i = 0; i < words.length; i++) {
                 let clean = words[i].replace(/[.,]/g,"");
-                if (clean.length > 5) { // Sélectionne des mots plus longs pour le challenge
+                if (clean.length > 5) {
                     let lastSelected = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : -5;
-                    if (i - lastSelected > 3) {
+                    if (i - lastSelected > 3 && selectedIndices.length < 6) {
                         if (Math.random() > 0.4) selectedIndices.push(i);
                     }
                 }
-                if (selectedIndices.length >= 6) break;
             }
             
             let displayHTML = "";
@@ -257,7 +241,8 @@
                     document.querySelectorAll('.word-item').forEach(w => { if(w.innerText === old) w.classList.remove('used'); });
                 }
                 zone.innerText = selectedWordText; zone.classList.add('filled');
-                selectedWordElement.classList.add('used'); selectedWordElement.classList.remove('selected');
+                selectedWordElement.classList.add('used'); 
+                selectedWordElement.classList.remove('selected');
                 selectedWordElement = null; selectedWordText = null;
             } else if (zone.innerText !== "") {
                 const old = zone.innerText;
@@ -267,27 +252,23 @@
         }
 
         function allowDrop(e) { e.preventDefault(); }
+
         function dropToZone(e) {
-            e.preventDefault(); if (isMobileMode) return;
+            e.preventDefault();
             const dataId = e.dataTransfer.getData("text");
             const dragged = document.getElementById(dataId);
-            if (e.target.classList.contains('drop-zone') && e.target.children.length === 0) {
-                e.target.appendChild(dragged); e.target.classList.add('filled');
+            if (e.target.classList.contains('drop-zone')) {
+                e.target.innerText = dragged.innerText;
+                e.target.classList.add('filled');
+                dragged.classList.add('used');
             }
-        }
-        function dropToBank(e) {
-            e.preventDefault(); if (isMobileMode) return;
-            const dataId = e.dataTransfer.getData("text");
-            const el = document.getElementById(dataId);
-            if(el.parentNode.classList.contains('drop-zone')) el.parentNode.classList.remove('filled');
-            document.getElementById('word-bank').appendChild(el);
         }
 
         function validate() {
             document.querySelectorAll('.drop-zone').forEach(zone => {
-                const text = zone.innerText || (zone.children[0] ? zone.children[0].innerText : "");
+                const text = zone.innerText.trim().toLowerCase();
                 if (text !== "") {
-                    const isOk = text.trim().toLowerCase() === zone.getAttribute('data-answer');
+                    const isOk = text === zone.getAttribute('data-answer');
                     zone.className = `drop-zone filled ${isOk ? 'is-correct' : 'is-incorrect'}`;
                 }
             });

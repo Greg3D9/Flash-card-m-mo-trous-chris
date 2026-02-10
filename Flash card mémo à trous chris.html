@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery Internship - MARINI Edition</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --iphone-green: #34C759;
+            --iphone-blue: #007AFF;
+            --glass: rgba(255, 255, 255, 0.9);
+            --text-main: #2d3436;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: #f0f3f8;
+            background-image: radial-gradient(#d1d9e6 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; margin: 0; padding: 20px;
+            color: var(--text-main);
+            transition: all 0.5s ease;
+        }
+
+        /* --- HEADER & SWITCH --- */
+        .top-header {
+            width: 100%; max-width: 900px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding: 10px 20px;
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .logo { 
+            font-weight: 800; font-size: 1.2rem; 
+            background: var(--primary-gradient); 
+            background-clip: text;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .switch-container { display: flex; align-items: center; gap: 10px; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #dfe6e9; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        input:checked + .slider { background: var(--iphone-green); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* --- CONTENEUR --- */
+        .card-container { 
+            width: 95%; max-width: 850px; background: white; border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1); padding: 40px;
+            position: relative; overflow: hidden; box-sizing: border-box;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card-container::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+            background: var(--primary-gradient);
+        }
+
+        /* --- BANQUE DE MOTS --- */
+        .word-bank {
+            background: #f8faff; padding: 25px; border-radius: 20px;
+            margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 12px;
+            justify-content: center; border: 2px dashed #e0e6ed; min-height: 50px;
+        }
+
+        .word-item {
+            background: white; color: #4834d4; padding: 10px 20px;
+            border-radius: 12px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e0e6ed; transition: all 0.2s;
+        }
+        .word-item:hover { transform: translateY(-3px); border-color: #6c5ce7; }
+        .word-item.selected { background: #4834d4; color: white; }
+        .word-item.used { opacity: 0.2; pointer-events: none; }
+
+        /* --- TEXTE --- */
+        .quiz-content { font-size: 1.4rem; line-height: 2.6; color: #2d3436; margin: 20px 0; }
+        .drop-zone {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 130px; min-height: 42px; border-radius: 10px;
+            background: #f1f2f6; border: 2px solid #dfe4ea;
+            margin: 0 6px; vertical-align: middle; transition: all 0.3s;
+        }
+        .drop-zone.filled { background: white; border-color: #6c5ce7; color: #6c5ce7; font-weight: 800; }
+        .is-correct { background: #ebfaef !important; border-color: #2ecc71 !important; color: #27ae60 !important; }
+        .is-incorrect { background: #fff5f5 !important; border-color: #ff7675 !important; color: #d63031 !important; animation: shake 0.4s; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+        /* --- CONTROLES --- */
+        .controls { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+        .main-btn { 
+            background: var(--primary-gradient); color: white; 
+            padding: 18px; border: none; border-radius: 18px; font-weight: 800;
+            font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+            transition: all 0.3s;
+        }
+
+        .bottom-actions { display: flex; gap: 10px; align-items: center; }
+        .side-btn { 
+            background: white; color: #636e72; border: 2px solid #dfe6e9;
+            width: 55px; height: 55px; border-radius: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+
+        .speed-control {
+            display: flex; flex-grow: 1; background: #dfe6e9; border-radius: 15px;
+            padding: 4px; gap: 2px;
+        }
+        .speed-opt {
+            flex: 1; text-align: center; padding: 8px 0; font-size: 0.85rem;
+            font-weight: 800; color: #636e72; cursor: pointer; border-radius: 11px;
+            transition: 0.2s;
+        }
+        .speed-opt.active { background: white; color: #764ba2; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        body.mobile-mode { background: #f2f2f7; }
+        body.mobile-mode .card-container { max-width: 420px; padding: 25px; border-radius: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="top-header">
+        <div class="logo">🏭 MARINI Pro-App</div>
+        <div class="switch-container">
+            <span style="font-size: 0.75rem; font-weight: 700; color: #636e72;">MODE IPHONE</span>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle" onchange="toggleMode()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="card-container">
+        <div id="part-label" style="color: #a29bfe; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; font-size: 0.8rem;">CHAPTER 01</div>
+        <h3 id="part-title" style="margin-top:0; font-size: 1.6rem; color: #2d3436;">Loading...</h3>
+        
+        <div class="word-bank" id="word-bank" ondrop="dropToBank(event)" ondragover="allowDrop(event)"></div>
+        <div id="quiz-text" class="quiz-content"></div>
+
+        <div class="controls">
+            <button class="main-btn" onclick="validate()">VÉRIFIER MES RÉPONSES</button>
+            <div class="bottom-actions">
+                <button class="side-btn" onclick="changePart(-1)">❮</button>
+                <div class="speed-control">
+                    <div class="speed-opt" onclick="setSpeed(0.5, this)">0.5x</div>
+                    <div class="speed-opt active" onclick="setSpeed(0.8, this)">0.8x</div>
+                    <div class="speed-opt" onclick="setSpeed(1, this)">1.0x</div>
+                </div>
+                <button class="side-btn" style="color: #a777e3; border-color: #a777e3;" onclick="speakFull()">🔊</button>
+                <button class="side-btn" onclick="changePart(1)">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+            { t: "Introduction", content: "Today, I am going to present my internship and three documents related to manufacturing and industrial innovation. This presentation explains my professional experience and what I learned about manufacturing processes and industrial organisation." },
+            { t: "The company", content: "I did a six-week internship at MARINI, a small-to-medium-sized company located in Livry-Gargan. The company was founded in 1975 and specialises in the manufacture of custom metal parts for elevator cabins." },
+            { t: "Internship activities", content: "During my internship, I observed and assisted my colleagues in their daily tasks. I took part in several manufacturing processes such as laser cutting, bending, tapping, and assembly. I also worked independently or with technicians, for example assembling safety system kits and using bending machines." },
+            { t: "Skills and difficulties", content: "This internship helped me understand how a manufacturing company works. I learned the importance of organisation, precision, and teamwork. I also faced difficulties such as lack of time and multiple tasks. To avoid mistakes, I had to be organised, make decisions, and find solutions efficiently." },
+            { t: "Technical report", content: "The first document is a technical report produced by Marini. It describes a centering kit used in elevator cabins. The document explains the components, technical characteristics, assembly steps, and safety features. Its goal is to ensure correct and safe use of the equipment." },
+            { t: "Industrial innovation", content: "The second document is a press article published in 2013 by David Szondy. It presents industrial innovation at Ford in the United States. The article explains Ford’s Freeform manufacturing technology, which allows prototypes to be made directly from CAD files. This process reduces development time and costs." },
+            { t: "Sheet metal fabrication", content: "The last document is a specialised press article published in 2019. It presents sheet metal fabrication as a manufacturing process. This process uses cutting and bending to produce thin metal parts. It is cost-effective and suitable for prototypes and finished products." },
+            { t: "Link with my internship", content: "These documents helped me better understand what I observed during my internship. They are directly related to manufacturing processes such as metal forming, assembly, and innovation. They show how modern industry combines technical knowledge, efficiency, and safety." },
+            { t: "Conclusion", content: "To conclude, my internship at MARINI allowed me to discover the reality of manufacturing work. The documents show the importance of technical documentation, innovation, and efficient production methods. This experience helped me understand the role of mechanical design and manufacturing in industry." },
+            { t: "Ending", content: "Thank you for your attention." }
+        ];
+
+        let currentIdx = 0;
+        let isMobileMode = false;
+        let selectedWordText = null;
+        let selectedWordElement = null;
+        let currentSpeed = 0.8;
+
+        function setSpeed(val, el) {
+            currentSpeed = val;
+            document.querySelectorAll('.speed-opt').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+            window.speechSynthesis.cancel();
+        }
+
+        function toggleMode() {
+            isMobileMode = document.getElementById('mode-toggle').checked;
+            document.body.classList.toggle('mobile-mode', isMobileMode);
+            initQuiz();
+        }
+
+        function initQuiz() {
+            window.speechSynthesis.cancel();
+            selectedWordText = null;
+            selectedWordElement = null;
+            const part = data[currentIdx];
+            document.getElementById('part-title').innerText = part.t;
+            document.getElementById('part-label').innerText = `CHAPTER ${String(currentIdx + 1).padStart(2, '0')}`;
+            
+            const words = part.content.split(' ');
+            let selectedIndices = [];
+            for (let i = 0; i < words.length; i++) {
+                let clean = words[i].replace(/[.,]/g,"");
+                if (clean.length > 5) { // Sélectionne des mots plus longs pour le challenge
+                    let lastSelected = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : -5;
+                    if (i - lastSelected > 3) {
+                        if (Math.random() > 0.4) selectedIndices.push(i);
+                    }
+                }
+                if (selectedIndices.length >= 6) break;
+            }
+            
+            let displayHTML = "";
+            let bankWords = [];
+            words.forEach((word, index) => {
+                let cleanWord = word.replace(/[.,?!”“]/g,"");
+                if (selectedIndices.includes(index)) {
+                    displayHTML += `<span class="drop-zone" data-answer="${cleanWord.toLowerCase()}" ondrop="dropToZone(event)" ondragover="allowDrop(event)" onclick="handleZoneClick(this)"></span>${word.match(/[.,]/) || ""} `;
+                    bankWords.push(cleanWord);
+                } else {
+                    displayHTML += word + " ";
+                }
+            });
+
+            document.getElementById('quiz-text').innerHTML = displayHTML;
+            const bank = document.getElementById('word-bank');
+            bank.innerHTML = "";
+            bankWords.sort(() => 0.5 - Math.random()).forEach((w, i) => {
+                const span = document.createElement('span');
+                span.className = 'word-item';
+                span.innerText = w;
+                span.id = "word-" + i;
+                span.draggable = !isMobileMode;
+                span.ondragstart = (e) => { e.dataTransfer.setData("text", e.target.id); };
+                span.onclick = function() { if(isMobileMode) handleWordClick(this); };
+                bank.appendChild(span);
+            });
+        }
+
+        function handleWordClick(el) {
+            document.querySelectorAll('.word-item').forEach(w => w.classList.remove('selected'));
+            if (selectedWordElement === el) { selectedWordElement = null; selectedWordText = null; }
+            else { el.classList.add('selected'); selectedWordElement = el; selectedWordText = el.innerText; }
+        }
+
+        function handleZoneClick(zone) {
+            if (!isMobileMode) return;
+            if (selectedWordText) {
+                if (zone.innerText !== "") {
+                    const old = zone.innerText;
+                    document.querySelectorAll('.word-item').forEach(w => { if(w.innerText === old) w.classList.remove('used'); });
+                }
+                zone.innerText = selectedWordText; zone.classList.add('filled');
+                selectedWordElement.classList.add('used'); selectedWordElement.classList.remove('selected');
+                selectedWordElement = null; selectedWordText = null;
+            } else if (zone.innerText !== "") {
+                const old = zone.innerText;
+                document.querySelectorAll('.word-item').forEach(w => { if(w.innerText === old) w.classList.remove('used'); });
+                zone.innerText = ""; zone.classList.remove('filled');
+            }
+        }
+
+        function allowDrop(e) { e.preventDefault(); }
+        function dropToZone(e) {
+            e.preventDefault(); if (isMobileMode) return;
+            const dataId = e.dataTransfer.getData("text");
+            const dragged = document.getElementById(dataId);
+            if (e.target.classList.contains('drop-zone') && e.target.children.length === 0) {
+                e.target.appendChild(dragged); e.target.classList.add('filled');
+            }
+        }
+        function dropToBank(e) {
+            e.preventDefault(); if (isMobileMode) return;
+            const dataId = e.dataTransfer.getData("text");
+            const el = document.getElementById(dataId);
+            if(el.parentNode.classList.contains('drop-zone')) el.parentNode.classList.remove('filled');
+            document.getElementById('word-bank').appendChild(el);
+        }
+
+        function validate() {
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                const text = zone.innerText || (zone.children[0] ? zone.children[0].innerText : "");
+                if (text !== "") {
+                    const isOk = text.trim().toLowerCase() === zone.getAttribute('data-answer');
+                    zone.className = `drop-zone filled ${isOk ? 'is-correct' : 'is-incorrect'}`;
+                }
+            });
+        }
+
+        function changePart(dir) { currentIdx = (currentIdx + dir + data.length) % data.length; initQuiz(); }
+
+        function speakFull() {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(data[currentIdx].content);
+            utterance.lang = 'en-US'; 
+            utterance.rate = currentSpeed;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        initQuiz();
+    </script>
+</body>
+</html>
